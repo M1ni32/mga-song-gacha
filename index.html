@@ -72,15 +72,19 @@ h1{font-size:clamp(23px,6.5vw,35px);line-height:1;margin:4px 0 0;letter-spacing:
 .draw:disabled{opacity:.72}
 .musicBtn{display:none;width:100%;border:0;border-radius:18px;padding:14px 16px;font-size:15px;font-weight:900;color:#fff;text-decoration:none;background:linear-gradient(115deg,#fc536d,#ea3c74 52%,#a841dc);border:1px solid rgba(255,255,255,.12)}
 .musicBtn.show{display:block}
-.musicBtn:disabled{opacity:.55}
+.musicBtn:disabled,.musicBtn.disabled{opacity:.55;pointer-events:none}
 .filters{border-top:1px solid var(--line);padding:16px;background:rgba(0,0,0,.06)}
 .tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:13px}
 .tab{border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--muted);border-radius:13px;padding:10px 3px;font-size:11px;font-weight:900}
 .tab.active{background:rgba(110,244,171,.13);color:#ecfff2;border-color:rgba(110,244,171,.35)}
-.filterLabel{font-size:10px;color:var(--muted);font-weight:900;margin:0 0 8px}
+.filterHead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 8px}
+.filterLabel{font-size:10px;color:var(--muted);font-weight:900;margin:0}
+.clearFilter{display:none;border:0;background:transparent;color:#8ff0bc;font-size:10px;font-weight:900;padding:4px 2px}
+.clearFilter.show{display:block}
 .chips{display:flex;gap:7px;flex-wrap:wrap;max-height:143px;overflow:auto}
-.chip{border:1px solid var(--line);background:rgba(255,255,255,.035);color:#dce8e0;border-radius:999px;padding:8px 10px;font-size:11px;font-weight:850}
-.chip.active{color:#081a11;border-color:transparent;background:linear-gradient(115deg,var(--lime),var(--green))}
+.chip{border:1px solid var(--line);background:rgba(255,255,255,.035);color:#dce8e0;border-radius:999px;padding:8px 10px;font-size:11px;font-weight:850;transition:.16s}
+.chip.active{color:#081a11;border-color:transparent;background:linear-gradient(115deg,var(--lime),var(--green));box-shadow:0 5px 18px rgba(83,232,159,.16)}
+.filterHint{font-size:9px;color:#759485;margin:7px 1px 0;line-height:1.45}
 .poolInfo{display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:10px;margin-top:11px}
 .particles{position:absolute;inset:0;pointer-events:none;overflow:hidden;border-radius:28px}
 .particle{position:absolute;left:50%;top:48%;width:7px;height:7px;border-radius:50%;background:rgba(210,255,131,.9);box-shadow:0 0 18px rgba(115,245,174,.7);animation:burst .75s ease-out forwards}
@@ -118,6 +122,11 @@ h1{font-size:clamp(23px,6.5vw,35px);line-height:1;margin:4px 0 0;letter-spacing:
 .cover.has-artwork .coverBottom{margin:-21px;padding:72px 21px 21px;background:linear-gradient(180deg,transparent,rgba(2,8,5,.80))}
 .cover.art-pop{animation:artPop .55s cubic-bezier(.17,.8,.25,1.12)}
 @keyframes artPop{0%{transform:scale(.94);filter:brightness(1.35)}55%{transform:scale(1.018)}100%{transform:none;filter:none}}
+
+.artLoading{position:absolute;z-index:5;left:50%;top:50%;transform:translate(-50%,-50%);display:none;align-items:center;gap:8px;padding:8px 11px;border-radius:999px;background:rgba(2,10,6,.66);border:1px solid rgba(255,255,255,.10);backdrop-filter:blur(10px);font-size:9px;font-weight:900;letter-spacing:.12em;color:#dfffee;pointer-events:none}
+.artLoading.show{display:flex}
+.artLoading i{width:12px;height:12px;border:2px solid rgba(255,255,255,.22);border-top-color:#9af5c2;border-radius:50%;animation:artSpin .7s linear infinite}
+@keyframes artSpin{to{transform:rotate(360deg)}}
 
 .gachaOverlay{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:24px;pointer-events:none;opacity:0;visibility:hidden;transition:opacity .16s ease,visibility .16s;background:
  radial-gradient(circle at 50% 43%,hsla(var(--fxHue,145),88%,58%,.17),transparent 30%),
@@ -158,6 +167,7 @@ h1{font-size:clamp(23px,6.5vw,35px);line-height:1;margin:4px 0 0;letter-spacing:
 @keyframes overlayFinish{0%{filter:brightness(1)}35%{filter:brightness(1.45)}100%{filter:brightness(1)}}
 
 /* v2.2 — low-probability special gacha effects */
+/* v2.3 — artwork reliability, Apple Music app deep-link, multi-select filters */
 .rareMark{opacity:0;transform:translateY(8px) scale(.9);font-size:11px;font-weight:1000;letter-spacing:.24em;margin:-12px 0 17px;padding:7px 11px;border-radius:999px;border:1px solid transparent;transition:.25s}
 .gachaOverlay.rare-rare .rareMark,.gachaOverlay.rare-ultra .rareMark,.gachaOverlay.rare-secret .rareMark{opacity:1;transform:none}
 .gachaOverlay.rare-rare{background:radial-gradient(circle at 50% 43%,rgba(255,211,99,.28),transparent 34%),rgba(7,6,2,.80)}
@@ -242,7 +252,7 @@ select{min-width:118px;color:#f0fff5;background:#15241d;border:1px solid var(--l
   <header class="topbar">
     <div class="brand">
       <div class="appleMark">🍏</div>
-      <div><div class="kicker">MGA SONG GACHA · v2.2</div><h1>ミセス曲ガチャ</h1></div>
+      <div><div class="kicker">MGA SONG GACHA · v2.3</div><h1>ミセス曲ガチャ</h1></div>
     </div>
     <div class="iconBtns">
       <button id="historyBtn" class="iconBtn" type="button" aria-label="履歴">🕘</button>
@@ -258,6 +268,7 @@ select{min-width:118px;color:#f0fff5;background:#15241d;border:1px solid var(--l
         <div id="cover" class="cover" style="--hue:145">
           <img id="coverArt" class="coverArt" alt="" referrerpolicy="no-referrer">
           <div class="coverShade"></div>
+          <div id="artLoading" class="artLoading"><i></i><span>JACKET</span></div>
           <div class="coverTop"><div class="coverApple">🍏</div><div id="coverYear" class="coverYear">MGA</div></div>
           <div class="coverBottom">
             <div id="coverTitle" class="coverTitle placeholderTitle">今日は<br>何を聴く？</div>
@@ -273,7 +284,7 @@ select{min-width:118px;color:#f0fff5;background:#15241d;border:1px solid var(--l
       </div>
       <div class="actions">
         <button id="drawBtn" class="draw" type="button">🎰 ガチャる</button>
-        <button id="musicBtn" class="musicBtn" type="button"> Musicで聴く</button>
+        <a id="musicBtn" class="musicBtn disabled" href="#" role="button" aria-disabled="true"> Musicで聴く</a>
       </div>
     </div>
 
@@ -284,12 +295,16 @@ select{min-width:118px;color:#f0fff5;background:#15241d;border:1px solid var(--l
         <button class="tab" data-mode="album" type="button">作品別</button>
         <button class="tab" data-mode="period" type="button">年代別</button>
       </div>
-      <div id="filterLabel" class="filterLabel">全曲ガチャ</div>
+      <div class="filterHead">
+        <div id="filterLabel" class="filterLabel">全曲ガチャ</div>
+        <button id="clearFilters" class="clearFilter" type="button">選択解除</button>
+      </div>
       <div id="chips" class="chips"></div>
+      <div id="filterHint" class="filterHint"></div>
       <div class="poolInfo"><span id="poolCount"></span><span id="excludeInfo"></span></div>
     </div>
   </section>
-  <div class="smallNote">非公式ファンメイド。曲を引くとAppleの公開カタログからジャケットと曲ページを照合します。</div>
+  <div class="smallNote">非公式ファンメイド。Appleの公開カタログから実ジャケットと曲ページを照合し、iPhoneではMusicアプリ直リンクを優先します。</div>
 </main>
 
 <div id="settingsBack" class="sheetBack"></div>
@@ -343,10 +358,10 @@ const defaults={animation:"standard",moodFx:true,rareFx:true,sound:false,recent:
 let settings={...defaults,...safeJSON(localStorage.getItem(SETTINGS_KEY),{})};
 let history=safeJSON(localStorage.getItem(HISTORY_KEY),[]).filter(x=>x&&x.id).slice(0,80);
 let appleCache=safeJSON(localStorage.getItem(APPLE_CACHE_KEY),{});
-let mode="all",selected=null,current=null,drawing=false;
+let mode="all",selected=new Set(),current=null,drawing=false;
 
 const $=id=>document.getElementById(id);
-const cover=$("cover"),coverArt=$("coverArt"),coverTitle=$("coverTitle"),coverAlbum=$("coverAlbum"),coverMood=$("coverMood"),coverYear=$("coverYear");
+const cover=$("cover"),coverArt=$("coverArt"),artLoading=$("artLoading"),coverTitle=$("coverTitle"),coverAlbum=$("coverAlbum"),coverMood=$("coverMood"),coverYear=$("coverYear");
 const gachaOverlay=$("gachaOverlay"),gachaRoll=$("gachaRoll"),gachaSub=$("gachaSub"),gachaLabel=$("gachaLabel"),rareMark=$("rareMark");
 let currentAppleMeta=null,artRequestToken=0;
 const meta1=$("meta1"),meta2=$("meta2"),rollName=$("rollName"),drawBtn=$("drawBtn"),musicBtn=$("musicBtn"),chips=$("chips");
@@ -373,9 +388,9 @@ function availableBase(){
 }
 function filteredPool(ignoreRecent=false){
   let p=availableBase();
-  if(mode==="mood"&&selected)p=p.filter(s=>s.moods.includes(selected));
-  if(mode==="album"&&selected)p=p.filter(s=>s.albums.includes(selected));
-  if(mode==="period"&&selected)p=p.filter(s=>periodMatch(s.year,selected));
+  if(mode==="mood"&&selected.size)p=p.filter(s=>s.moods.some(m=>selected.has(m)));
+  if(mode==="album"&&selected.size)p=p.filter(s=>s.albums.some(a=>selected.has(a)));
+  if(mode==="period"&&selected.size)p=p.filter(s=>[...selected].some(label=>periodMatch(s.year,label)));
   if(!ignoreRecent && settings.recent>0 && history.length){
     const recentKeys=new Set(history.slice(0,settings.recent).map(h=>canonicalTitle(h.title)));
     const reduced=p.filter(s=>!recentKeys.has(canonicalTitle(s.title)));
@@ -396,16 +411,27 @@ function clearArtwork(){
   artRequestToken++;
   currentAppleMeta=null;
   cover.classList.remove("has-artwork","art-pop");
+  artLoading.classList.remove("show");
+  coverArt.onload=null;coverArt.onerror=null;
   coverArt.removeAttribute("src");
   coverArt.alt="";
 }
 function applyArtwork(meta,s){
-  if(!meta?.artwork||!s||current?.id!==s.id)return;
+  if(!meta?.artwork||!s||current?.id!==s.id){artLoading.classList.remove("show");return}
+  let triedFallback=false;
   coverArt.onload=()=>{
     if(current?.id!==s.id)return;
+    artLoading.classList.remove("show");
     cover.classList.add("has-artwork");
     cover.classList.remove("art-pop");void cover.offsetWidth;cover.classList.add("art-pop");
     setTimeout(()=>cover.classList.remove("art-pop"),700);
+  };
+  coverArt.onerror=()=>{
+    if(!triedFallback&&meta.artworkFallback&&coverArt.src!==meta.artworkFallback){
+      triedFallback=true;coverArt.src=meta.artworkFallback;return;
+    }
+    artLoading.classList.remove("show");
+    cover.classList.remove("has-artwork");
   };
   coverArt.alt=`${s.title} のジャケット`;
   coverArt.src=meta.artwork;
@@ -426,9 +452,16 @@ function renderSong(s,preview=false){
   meta1.textContent=`${s.year} · ${albumName(s)}`;
   meta2.textContent=s.status==="upcoming"?(s.note||"配信予定"):s.moods.join(" / ");
   musicBtn.classList.toggle("show",s.status!=="upcoming");
-  musicBtn.disabled=false;
+  musicBtn.classList.add("disabled");
+  musicBtn.setAttribute("aria-disabled","true");
+  musicBtn.removeAttribute("href");
   musicBtn.textContent=" Musicで聴く";
-  if(s.status!=="upcoming")hydrateAppleMeta(s);
+  if(s.status!=="upcoming"){
+    artLoading.classList.add("show");
+    hydrateAppleMeta(s);
+  }else{
+    artLoading.classList.remove("show");
+  }
 }
 function addHistory(s,rareTier="normal"){
   const item={id:s.id,title:s.title,year:s.year,moods:s.moods,albums:s.albums,status:s.status,variant:s.variant,rareTier,at:Date.now()};
@@ -570,23 +603,44 @@ function optionsForMode(){
   if(mode==="period")return Object.keys(PERIODS);
   return [];
 }
+function selectedSummary(){
+  const vals=[...selected];
+  if(!vals.length)return "すべて";
+  if(vals.length===1)return vals[0];
+  if(vals.length===2)return vals.join(" ＋ ");
+  return `${vals[0]} ＋ 他${vals.length-1}`;
+}
 function updateBadge(){
-  $("modeBadge").textContent=mode==="all"?"🎲 全曲からランダム":mode==="mood"?`🎧 ${selected}`:mode==="album"?`💿 ${selected}`:`🗓 ${selected}`;
+  if(mode==="all")$("modeBadge").textContent="🎲 全曲からランダム";
+  else if(mode==="mood")$("modeBadge").textContent=`🎧 ${selectedSummary()}`;
+  else if(mode==="album")$("modeBadge").textContent=`💿 ${selectedSummary()}`;
+  else $("modeBadge").textContent=`🗓 ${selectedSummary()}`;
 }
 function renderChips(){
   chips.innerHTML="";
   const opts=optionsForMode();
-  if(mode==="all"){$("filterLabel").textContent="全曲ガチャ";selected=null}
-  else{
-    $("filterLabel").textContent=mode==="mood"?"曲調を選択":mode==="album"?"作品を選択":"年代を選択";
-    if(!selected||!opts.includes(selected))selected=opts[0]||null;
+  const clearBtn=$("clearFilters"),hint=$("filterHint");
+  if(mode==="all"){
+    $("filterLabel").textContent="全曲ガチャ";
+    selected.clear();
+    clearBtn.classList.remove("show");
+    hint.textContent="";
+  }else{
+    $("filterLabel").textContent=mode==="mood"?"曲調を選択（複数OK）":mode==="album"?"作品を選択（複数OK）":"年代を選択（複数OK）";
+    clearBtn.classList.toggle("show",selected.size>0);
+    hint.textContent="選んだ項目それぞれの曲を全部まとめ、重複を1曲にして、その候補全体からランダム抽選します。未選択ならすべて対象です。";
     opts.forEach(o=>{
-      const b=document.createElement("button");b.type="button";b.className="chip"+(o===selected?" active":"");b.textContent=o;
-      b.onclick=()=>{selected=o;renderChips();updateBadge();updateCount()};chips.appendChild(b);
+      const b=document.createElement("button");b.type="button";b.className="chip"+(selected.has(o)?" active":"");b.textContent=o;
+      b.onclick=()=>{
+        if(selected.has(o))selected.delete(o);else selected.add(o);
+        renderChips();updateBadge();updateCount();
+      };
+      chips.appendChild(b);
     });
   }
   updateBadge();updateCount();
 }
+
 function openSheet(which){
   const sheet=$(which+"Sheet"),back=$(which+"Back");sheet.classList.add("open");back.classList.add("open");sheet.setAttribute("aria-hidden","false");
   if(which==="history")renderHistory();
@@ -609,22 +663,30 @@ function renderHistory(){
 function normalizeForMatch(s){
   return s.normalize("NFKC").toLowerCase().replace(/[’'・･:：!！?？.,。()\[\]〜～\-–—_\s]/g,"");
 }
-function artworkLarge(url){
+function artworkLarge(url,size=700){
   if(!url)return null;
-  return url.replace(/\/\d+x\d+bb\./, "/700x700bb.").replace(/\/\d+x\d+bb-/, "/700x700bb-");
+  return url.replace(/\/\d+x\d+bb(?=[-.])/,`/${size}x${size}bb`);
 }
 function jsonpAppleSearch(term){
   return new Promise((resolve,reject)=>{
     const cb="__mgaApple_"+Date.now()+"_"+Math.random().toString(36).slice(2);
     const script=document.createElement("script");
-    let done=false;
-    const clean=()=>{if(done)return;done=true;clearTimeout(timer);try{delete window[cb]}catch{};script.remove()};
+    let done=false,timer=null;
+    const clean=()=>{if(done)return;done=true;if(timer)clearTimeout(timer);try{delete window[cb]}catch{};script.remove()};
     window[cb]=data=>{clean();resolve(data)};
     script.onerror=()=>{clean();reject(new Error("Apple catalog request failed"))};
+    timer=setTimeout(()=>{clean();reject(new Error("Apple catalog timeout"))},6500);
     script.src=`https://itunes.apple.com/search?term=${encodeURIComponent(term)}&country=JP&media=music&entity=song&limit=50&callback=${encodeURIComponent(cb)}`;
     document.head.appendChild(script);
-    const timer=setTimeout(()=>{clean();reject(new Error("Apple catalog timeout"))},6500);
   });
+}
+async function appleCatalogSearch(term){
+  const url=`https://itunes.apple.com/search?term=${encodeURIComponent(term)}&country=JP&media=music&entity=song&limit=50`;
+  try{
+    const res=await fetch(url,{mode:"cors",cache:"no-store"});
+    if(res.ok)return await res.json();
+  }catch{}
+  return await jsonpAppleSearch(term);
 }
 function scoreAppleResult(s,r){
   const artist=(r.artistName||"").toLowerCase();
@@ -632,37 +694,55 @@ function scoreAppleResult(s,r){
   const target=baseSearchTitle(s.title),tNorm=normalizeForMatch(target);
   const name=r.trackName||"",n=normalizeForMatch(name);
   let score=0;
-  if(n===tNorm)score+=120;
-  else if(n.startsWith(tNorm)||tNorm.startsWith(n))score+=70;
-  else if(n.includes(tNorm)||tNorm.includes(n))score+=48;
+  if(n===tNorm)score+=160;
+  else if(n.startsWith(tNorm)||tNorm.startsWith(n))score+=88;
+  else if(n.includes(tNorm)||tNorm.includes(n))score+=58;
   const a=normalizeForMatch(albumName(s)),ca=normalizeForMatch(r.collectionName||"");
-  if(a&&ca&&(ca===a||ca.includes(a)||a.includes(ca)))score+=18;
+  if(a&&ca&&(ca===a||ca.includes(a)||a.includes(ca)))score+=24;
   const low=s.title.toLowerCase(),rn=name.toLowerCase();
   if(s.variant){
     for(const token of ["white lounge","album","remix","2025"]){
-      if(low.includes(token)===rn.includes(token))score+=7;
-      if(low.includes(token)&&rn.includes(token))score+=18;
+      if(low.includes(token)&&rn.includes(token))score+=24;
+      else if(low.includes(token)!==rn.includes(token))score-=8;
     }
   }
+  if(r.trackViewUrl)score+=3;
+  if(r.artworkUrl100||r.artworkUrl60)score+=3;
   return score;
+}
+async function searchAppleBest(s){
+  const title=baseSearchTitle(s.title);
+  const terms=[
+    `Mrs. GREEN APPLE ${title}`,
+    `${title} Mrs. GREEN APPLE`,
+    `Mrs. GREEN APPLE ${albumName(s)}`
+  ];
+  let best=null,bestScore=-999;
+  for(const term of terms){
+    try{
+      const data=await appleCatalogSearch(term);
+      for(const r of (data.results||[])){
+        const sc=scoreAppleResult(s,r);
+        if(sc>bestScore){bestScore=sc;best=r}
+      }
+      if(bestScore>=150)break;
+    }catch{}
+  }
+  return best&&bestScore>=52?best:null;
 }
 async function getAppleMeta(s){
   if(!s||s.status==="upcoming")return null;
   const key=String(s.id);
-  if(appleCache[key]?.url&&appleCache[key]?.artwork)return appleCache[key];
-  const target=baseSearchTitle(s.title),term=`Mrs. GREEN APPLE ${target}`;
+  const cached=appleCache[key];
+  if(cached?.url&&cached?.artwork)return cached;
   try{
-    const data=await jsonpAppleSearch(term);
-    let best=null,bestScore=-999;
-    for(const r of (data.results||[])){
-      const sc=scoreAppleResult(s,r);
-      if(sc>bestScore){bestScore=sc;best=r}
-    }
-    if(best&&bestScore>=55){
-      const direct=best.trackViewUrl||null;
+    const best=await searchAppleBest(s);
+    if(best){
+      const rawArt=best.artworkUrl100||best.artworkUrl60||null;
       const meta={
-        url:direct,
-        artwork:artworkLarge(best.artworkUrl100||best.artworkUrl60||null),
+        url:best.trackViewUrl||null,
+        artwork:artworkLarge(rawArt,900),
+        artworkFallback:rawArt,
         trackName:best.trackName||s.title,
         album:best.collectionName||albumName(s),
         trackId:best.trackId||null,
@@ -670,38 +750,62 @@ async function getAppleMeta(s){
         at:Date.now()
       };
       appleCache[key]=meta;
-      localStorage.setItem(APPLE_CACHE_KEY,JSON.stringify(appleCache));
+      try{localStorage.setItem(APPLE_CACHE_KEY,JSON.stringify(appleCache))}catch{}
       return meta;
     }
   }catch(e){}
   return null;
 }
+function isIOS(){
+  return /iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+}
+function appleMusicAppURL(webUrl){
+  if(!webUrl)return null;
+  return webUrl.replace(/^https?:\/\//i,"music://");
+}
+function setMusicDestination(meta,s){
+  musicBtn.classList.remove("disabled");
+  musicBtn.setAttribute("aria-disabled","false");
+  if(meta?.url){
+    const appUrl=isIOS()?appleMusicAppURL(meta.url):meta.url;
+    musicBtn.href=appUrl||meta.url;
+    musicBtn.dataset.webUrl=meta.url;
+    musicBtn.dataset.appUrl=appUrl||"";
+    musicBtn.textContent=isIOS()?" Musicアプリでこの曲を開く":" Apple Musicでこの曲を開く";
+    return;
+  }
+  const search=`https://music.apple.com/jp/search?term=${encodeURIComponent("Mrs. GREEN APPLE "+baseSearchTitle(s.title))}`;
+  const appSearch=isIOS()?appleMusicAppURL(search):search;
+  musicBtn.href=appSearch||search;
+  musicBtn.dataset.webUrl=search;
+  musicBtn.dataset.appUrl=appSearch||"";
+  musicBtn.textContent=" Musicで検索";
+}
 async function hydrateAppleMeta(s){
   const token=++artRequestToken;
-  musicBtn.disabled=true;musicBtn.textContent=" ジャケット取得中…";
+  musicBtn.classList.add("disabled");
+  musicBtn.setAttribute("aria-disabled","true");
+  musicBtn.removeAttribute("href");
+  musicBtn.textContent=" ジャケット取得中…";
+  artLoading.classList.add("show");
   const meta=await getAppleMeta(s);
   if(token!==artRequestToken||current?.id!==s.id)return;
   currentAppleMeta=meta;
   if(meta?.artwork)applyArtwork(meta,s);
+  else artLoading.classList.remove("show");
   if(meta?.album){coverAlbum.textContent=meta.album;meta1.textContent=`${s.year} · ${meta.album}`}
-  musicBtn.disabled=false;
-  musicBtn.textContent=meta?.url?" Musicでこの曲を開く":" Musicで検索";
+  setMusicDestination(meta,s);
 }
-async function openMusic(){
-  if(!current||current.status==="upcoming")return;
-  musicBtn.disabled=true;musicBtn.textContent=" 曲を確認しています…";
-  const meta=currentAppleMeta?.url?currentAppleMeta:await getAppleMeta(current);
-  musicBtn.disabled=false;
-  if(meta?.url){
-    currentAppleMeta=meta;
-    musicBtn.textContent=" Musicでこの曲を開く";
-    if(meta.artwork)applyArtwork(meta,current);
-    window.location.assign(meta.url);
-    return;
+function openMusic(e){
+  if(!current||current.status==="upcoming"){e?.preventDefault();return}
+  if(musicBtn.classList.contains("disabled")||!musicBtn.getAttribute("href")){
+    e?.preventDefault();return;
   }
-  musicBtn.textContent=" Musicで検索";
-  window.location.assign(`https://music.apple.com/jp/search?term=${encodeURIComponent("Mrs. GREEN APPLE "+baseSearchTitle(current.title))}`);
+  // Important: when metadata is already prefetched, allow the real anchor tap
+  // to navigate directly to the music:// URL. This preserves the user gesture,
+  // which is more reliable for launching the Music app on iPhone.
 }
+
 function syncSettingsUI(){
   $("animationMode").value=settings.animation;$("moodFx").checked=settings.moodFx;$("rareFx").checked=settings.rareFx;$("soundFx").checked=settings.sound;
   $("recentExclude").value=String(settings.recent);$("variants").checked=settings.variants;$("upcoming").checked=settings.upcoming;
@@ -712,9 +816,10 @@ function readSettingsUI(){
   saveSettings();updateCount();
 }
 document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{
-  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));t.classList.add("active");mode=t.dataset.mode;selected=null;renderChips();
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));t.classList.add("active");mode=t.dataset.mode;selected.clear();renderChips();
 });
-drawBtn.onclick=drawSong;musicBtn.onclick=openMusic;
+$("clearFilters").onclick=()=>{selected.clear();renderChips();updateBadge();updateCount()};
+drawBtn.onclick=drawSong;musicBtn.addEventListener("click",openMusic);
 $("settingsBtn").onclick=()=>openSheet("settings");$("historyBtn").onclick=()=>openSheet("history");
 $("settingsBack").onclick=()=>closeSheet("settings");$("historyBack").onclick=()=>closeSheet("history");
 document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>closeSheet(b.dataset.close));
