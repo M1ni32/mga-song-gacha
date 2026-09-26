@@ -106,6 +106,87 @@ h1{font-size:clamp(23px,6.5vw,35px);line-height:1;margin:4px 0 0;letter-spacing:
 .screenFlash{position:fixed;inset:0;pointer-events:none;z-index:40;opacity:0;background:rgba(4,8,6,.82)}
 .screenFlash.go{animation:flashDark .42s ease}
 @keyframes flashDark{0%{opacity:0}35%{opacity:.84}100%{opacity:0}}
+
+/* v2.1 — real artwork + stronger gacha sequence */
+.coverArt{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:0;transform:scale(1.045);transition:opacity .38s ease,transform .72s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+.coverShade{position:absolute;inset:0;z-index:1;opacity:0;transition:opacity .35s;background:linear-gradient(180deg,rgba(1,7,4,.06) 0%,rgba(1,7,4,.02) 45%,rgba(1,7,4,.82) 100%);pointer-events:none}
+.cover.has-artwork .coverArt{opacity:1;transform:scale(1)}
+.cover.has-artwork .coverShade{opacity:1}
+.cover.has-artwork:before,.cover.has-artwork:after{opacity:0}
+.cover.has-artwork .coverApple{background:rgba(4,12,8,.44);box-shadow:0 4px 20px rgba(0,0,0,.18)}
+.cover.has-artwork .coverYear{padding:6px 8px;border-radius:999px;background:rgba(4,12,8,.46);backdrop-filter:blur(8px)}
+.cover.has-artwork .coverBottom{margin:-21px;padding:72px 21px 21px;background:linear-gradient(180deg,transparent,rgba(2,8,5,.80))}
+.cover.art-pop{animation:artPop .55s cubic-bezier(.17,.8,.25,1.12)}
+@keyframes artPop{0%{transform:scale(.94);filter:brightness(1.35)}55%{transform:scale(1.018)}100%{transform:none;filter:none}}
+
+.gachaOverlay{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:24px;pointer-events:none;opacity:0;visibility:hidden;transition:opacity .16s ease,visibility .16s;background:
+ radial-gradient(circle at 50% 43%,hsla(var(--fxHue,145),88%,58%,.17),transparent 30%),
+ rgba(1,8,5,.74);backdrop-filter:blur(11px);-webkit-backdrop-filter:blur(11px)}
+.gachaOverlay.active{opacity:1;visibility:visible}
+.gachaOverlay.short{background:rgba(1,8,5,.45);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
+.gachaCore{position:relative;width:min(88vw,430px);min-height:310px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;isolation:isolate}
+.gachaAura{position:absolute;width:min(74vw,310px);aspect-ratio:1;border-radius:50%;background:
+ radial-gradient(circle,hsla(var(--fxHue,145),96%,70%,.30) 0 8%,hsla(var(--fxHue,145),92%,55%,.11) 36%,transparent 68%);
+ filter:blur(1px);animation:auraPulse .85s ease-in-out infinite alternate;z-index:-2}
+.gachaRing{position:absolute;width:min(63vw,268px);aspect-ratio:1;border-radius:50%;border:1px solid hsla(var(--fxHue,145),96%,80%,.45);box-shadow:
+ 0 0 0 18px hsla(var(--fxHue,145),80%,60%,.035),
+ 0 0 0 42px hsla(var(--fxHue,145),80%,60%,.022),
+ 0 0 58px hsla(var(--fxHue,145),85%,58%,.24);
+ animation:ringSpin 2.2s linear infinite;z-index:-1}
+.gachaRing:before,.gachaRing:after{content:"";position:absolute;inset:19px;border-radius:50%;border:1px dashed hsla(var(--fxHue,145),90%,78%,.32)}
+.gachaRing:after{inset:46px;border-style:solid;border-color:hsla(var(--fxHue,145),90%,78%,.20);animation:ringSpinReverse 1.4s linear infinite}
+.gachaApple{width:68px;height:68px;border-radius:23px;display:grid;place-items:center;font-size:36px;margin-bottom:27px;background:linear-gradient(145deg,rgba(218,255,128,.98),rgba(63,223,149,.94) 58%,rgba(78,212,207,.94));box-shadow:0 15px 55px hsla(var(--fxHue,145),80%,55%,.30);animation:appleFloat .72s ease-in-out infinite alternate}
+.gachaLabel{font-size:10px;font-weight:950;letter-spacing:.26em;color:#9effc9;margin-bottom:10px}
+.gachaRoll{max-width:min(86vw,540px);font-size:clamp(25px,8vw,46px);line-height:1.05;font-weight:950;letter-spacing:-.045em;text-wrap:balance;text-shadow:0 8px 40px rgba(0,0,0,.48);min-height:54px;display:grid;place-items:center}
+.gachaRoll.swap{animation:rollSwap .13s ease both}
+.gachaSub{font-size:11px;color:#b8d3c4;margin-top:9px;min-height:16px}
+.gachaTrack{width:min(72vw,330px);height:4px;border-radius:99px;background:rgba(255,255,255,.10);overflow:hidden;margin-top:27px}
+.gachaTrack i{display:block;width:38%;height:100%;border-radius:99px;background:linear-gradient(90deg,transparent,#baff88,#72f1c4,transparent);transform:translateX(-120%);animation:trackSweep .58s ease-in-out infinite}
+.gachaOverlay.lock .gachaTrack i{width:100%;transform:none;animation:none;background:linear-gradient(90deg,#d6ff8e,#6df0bd)}
+.gachaOverlay.lock .gachaRing{animation-duration:.55s;box-shadow:0 0 0 18px hsla(var(--fxHue,145),80%,60%,.06),0 0 0 42px hsla(var(--fxHue,145),80%,60%,.04),0 0 100px hsla(var(--fxHue,145),92%,65%,.52)}
+.gachaOverlay.lock .gachaApple{animation:lockPop .35s cubic-bezier(.16,.85,.25,1.3) both}
+.gachaOverlay.finish{animation:overlayFinish .42s ease both}
+.gachaOverlay.finish .gachaRoll{animation:finalName .42s cubic-bezier(.16,.8,.25,1.15) both}
+@keyframes auraPulse{to{transform:scale(1.13);opacity:.72}}
+@keyframes ringSpin{to{transform:rotate(360deg)}}
+@keyframes ringSpinReverse{to{transform:rotate(-360deg)}}
+@keyframes appleFloat{to{transform:translateY(-7px) rotate(2deg)}}
+@keyframes rollSwap{0%{opacity:.05;transform:translateY(13px) scale(.94);filter:blur(5px)}100%{opacity:1;transform:none;filter:none}}
+@keyframes trackSweep{0%{transform:translateX(-130%)}100%{transform:translateX(350%)}}
+@keyframes lockPop{0%{transform:scale(.72);filter:brightness(2)}65%{transform:scale(1.12)}100%{transform:scale(1)}}
+@keyframes finalName{0%{opacity:.2;transform:scale(.82);filter:blur(8px)}100%{opacity:1;transform:none;filter:none}}
+@keyframes overlayFinish{0%{filter:brightness(1)}35%{filter:brightness(1.45)}100%{filter:brightness(1)}}
+
+/* v2.2 — low-probability special gacha effects */
+.rareMark{opacity:0;transform:translateY(8px) scale(.9);font-size:11px;font-weight:1000;letter-spacing:.24em;margin:-12px 0 17px;padding:7px 11px;border-radius:999px;border:1px solid transparent;transition:.25s}
+.gachaOverlay.rare-rare .rareMark,.gachaOverlay.rare-ultra .rareMark,.gachaOverlay.rare-secret .rareMark{opacity:1;transform:none}
+.gachaOverlay.rare-rare{background:radial-gradient(circle at 50% 43%,rgba(255,211,99,.28),transparent 34%),rgba(7,6,2,.80)}
+.gachaOverlay.rare-rare .rareMark{color:#fff1b2;border-color:rgba(255,220,121,.42);background:rgba(255,206,79,.10);box-shadow:0 0 28px rgba(255,206,79,.14)}
+.gachaOverlay.rare-rare .gachaApple{background:linear-gradient(145deg,#fff6c9,#ffd66e 54%,#ffad4a);box-shadow:0 0 0 1px rgba(255,242,173,.65),0 14px 65px rgba(255,194,74,.42)}
+.gachaOverlay.rare-rare .gachaRing{border-color:rgba(255,229,145,.75);box-shadow:0 0 0 18px rgba(255,219,113,.06),0 0 0 42px rgba(255,219,113,.035),0 0 90px rgba(255,203,82,.42)}
+.gachaOverlay.rare-ultra{background:radial-gradient(circle at 50% 43%,rgba(255,255,255,.20),transparent 27%),conic-gradient(from 210deg at 50% 50%,rgba(94,240,195,.20),rgba(123,166,255,.18),rgba(238,123,255,.18),rgba(255,219,112,.20),rgba(94,240,195,.20)),rgba(2,6,5,.86)}
+.gachaOverlay.rare-ultra .rareMark{color:#fff;border-color:rgba(255,255,255,.48);background:rgba(255,255,255,.10);box-shadow:0 0 36px rgba(255,255,255,.24)}
+.gachaOverlay.rare-ultra .gachaApple{background:linear-gradient(135deg,#d8ff9b,#69f6c2 34%,#7fcfff 67%,#df8fff);box-shadow:0 0 0 1px rgba(255,255,255,.75),0 0 75px rgba(136,235,255,.52);animation:ultraApple .75s ease-in-out infinite alternate}
+.gachaOverlay.rare-ultra .gachaRing{border-color:rgba(255,255,255,.72);box-shadow:0 0 0 18px rgba(110,245,202,.06),0 0 0 42px rgba(133,174,255,.05),0 0 120px rgba(218,140,255,.38);animation-duration:.75s}
+.gachaOverlay.rare-secret{background:radial-gradient(circle at 50% 43%,rgba(255,255,255,.18),transparent 24%),linear-gradient(135deg,rgba(22,8,30,.92),rgba(3,21,17,.94))}
+.gachaOverlay.rare-secret .rareMark{color:#fff;border-color:rgba(255,255,255,.72);background:rgba(255,255,255,.13);box-shadow:0 0 50px rgba(255,255,255,.32);animation:secretMark .8s ease-in-out infinite alternate}
+.gachaOverlay.rare-secret .gachaApple{background:#fff;color:#16231d;box-shadow:0 0 0 1px #fff,0 0 95px rgba(255,255,255,.62);animation:secretApple .55s ease-in-out infinite alternate}
+.gachaOverlay.rare-secret .gachaAura{background:radial-gradient(circle,rgba(255,255,255,.34) 0 7%,rgba(164,255,221,.11) 34%,transparent 70%);animation-duration:.45s}
+.gachaOverlay.rare-secret .gachaRing{border-color:#fff;box-shadow:0 0 0 18px rgba(255,255,255,.08),0 0 0 42px rgba(255,255,255,.05),0 0 140px rgba(255,255,255,.56);animation-duration:.46s}
+.gachaOverlay.rare-secret .gachaRing:before{border-style:solid;border-color:rgba(255,255,255,.72)}
+.gachaOverlay.rare-secret .gachaRing:after{border-color:rgba(139,255,211,.62);animation-duration:.38s}
+@keyframes ultraApple{to{transform:translateY(-8px) rotate(7deg) scale(1.07);filter:hue-rotate(65deg)}}
+@keyframes secretApple{to{transform:scale(1.11) rotate(-4deg);filter:brightness(1.35)}}
+@keyframes secretMark{to{letter-spacing:.33em;text-shadow:0 0 16px rgba(255,255,255,.8)}}
+.cover.rare-rare{box-shadow:0 0 0 2px rgba(255,221,126,.92),0 18px 65px rgba(255,194,74,.26)}
+.cover.rare-ultra{box-shadow:0 0 0 2px rgba(255,255,255,.82),0 0 48px rgba(114,240,207,.24),0 18px 78px rgba(183,124,255,.24);animation:rareCardGlow 1.2s ease-in-out 2 alternate}
+.cover.rare-secret{box-shadow:0 0 0 2px #fff,0 0 70px rgba(255,255,255,.34),0 24px 95px rgba(108,255,203,.24);animation:secretCardReveal .9s cubic-bezier(.15,.85,.2,1.2)}
+@keyframes rareCardGlow{to{filter:brightness(1.15) saturate(1.16)}}
+@keyframes secretCardReveal{0%{opacity:0;transform:scale(.72) rotateY(70deg);filter:blur(12px) brightness(2)}70%{opacity:1;transform:scale(1.035) rotateY(0);filter:blur(0) brightness(1.2)}100%{transform:scale(1);filter:none}}
+
+.histMini{overflow:hidden}
+.histMini img{width:100%;height:100%;object-fit:cover;display:block}
+
 .sheetBack{position:fixed;inset:0;background:rgba(0,0,0,.56);z-index:70;opacity:0;pointer-events:none;transition:.23s;backdrop-filter:blur(5px)}
 .sheetBack.open{opacity:1;pointer-events:auto}
 .sheet{position:fixed;left:50%;bottom:0;z-index:71;width:min(760px,100%);max-height:82vh;overflow:auto;transform:translate(-50%,105%);transition:.28s cubic-bezier(.18,.78,.25,1);background:#0b1913;border:1px solid rgba(255,255,255,.10);border-radius:27px 27px 0 0;padding:13px 16px calc(26px + env(safe-area-inset-bottom));box-shadow:0 -25px 75px rgba(0,0,0,.45)}
@@ -138,17 +219,30 @@ select{min-width:118px;color:#f0fff5;background:#15241d;border:1px solid var(--l
   h1{font-size:23px}
 }
 @media(prefers-reduced-motion:reduce){
-  *,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  .aurora,.particle{animation:none!important}
+  .gachaRing,.gachaApple,.gachaAura{animation-duration:1.8s!important}
+  .sheet,.sheetBack{transition-duration:.01ms!important}
 }
 </style>
 </head>
 <body>
 <div class="bg"></div><div class="grain"></div><div class="aurora a1"></div><div class="aurora a2"></div><div id="screenFlash" class="screenFlash"></div>
+<div id="gachaOverlay" class="gachaOverlay" aria-hidden="true">
+  <div class="gachaCore">
+    <div class="gachaAura"></div><div class="gachaRing"></div>
+    <div class="gachaApple">🍏</div>
+    <div id="rareMark" class="rareMark"></div>
+    <div id="gachaLabel" class="gachaLabel">MGA SONG GACHA</div>
+    <div id="gachaRoll" class="gachaRoll">抽選中...</div>
+    <div id="gachaSub" class="gachaSub">次の1曲を選んでいます</div>
+    <div class="gachaTrack"><i></i></div>
+  </div>
+</div>
 <main class="wrap">
   <header class="topbar">
     <div class="brand">
       <div class="appleMark">🍏</div>
-      <div><div class="kicker">MGA SONG GACHA · v2</div><h1>ミセス曲ガチャ</h1></div>
+      <div><div class="kicker">MGA SONG GACHA · v2.2</div><h1>ミセス曲ガチャ</h1></div>
     </div>
     <div class="iconBtns">
       <button id="historyBtn" class="iconBtn" type="button" aria-label="履歴">🕘</button>
@@ -162,6 +256,8 @@ select{min-width:118px;color:#f0fff5;background:#15241d;border:1px solid var(--l
       <div id="modeBadge" class="modeBadge">🎲 全曲からランダム</div>
       <div class="coverWrap">
         <div id="cover" class="cover" style="--hue:145">
+          <img id="coverArt" class="coverArt" alt="" referrerpolicy="no-referrer">
+          <div class="coverShade"></div>
           <div class="coverTop"><div class="coverApple">🍏</div><div id="coverYear" class="coverYear">MGA</div></div>
           <div class="coverBottom">
             <div id="coverTitle" class="coverTitle placeholderTitle">今日は<br>何を聴く？</div>
@@ -193,7 +289,7 @@ select{min-width:118px;color:#f0fff5;background:#15241d;border:1px solid var(--l
       <div class="poolInfo"><span id="poolCount"></span><span id="excludeInfo"></span></div>
     </div>
   </section>
-  <div class="smallNote">非公式ファンメイド。Apple Musicボタンは公開検索結果から曲ページを自動照合し、見つからない場合は検索画面へ移動します。</div>
+  <div class="smallNote">非公式ファンメイド。曲を引くとAppleの公開カタログからジャケットと曲ページを照合します。</div>
 </main>
 
 <div id="settingsBack" class="sheetBack"></div>
@@ -201,12 +297,16 @@ select{min-width:118px;color:#f0fff5;background:#15241d;border:1px solid var(--l
   <div class="handle"></div>
   <div class="sheetHead"><h2>⚙️ ガチャ設定</h2><button class="close" data-close="settings" type="button">×</button></div>
   <div class="setting">
-    <div class="settingText"><b>ガチャ演出</b><span>連打したい時はSHORT / OFFがおすすめ</span></div>
+    <div class="settingText"><b>ガチャ演出</b><span>STANDARDからでも画面全体の抽選演出が入ります</span></div>
     <select id="animationMode"><option value="off">OFF</option><option value="short">SHORT</option><option value="standard">STANDARD</option><option value="rich">RICH</option></select>
   </div>
   <div class="setting">
     <div class="settingText"><b>曲調ごとの決定演出</b><span>夜・爆上がり・ダークなどで動きが変わります</span></div>
     <label class="switch"><input id="moodFx" type="checkbox"><span class="slider"></span></label>
+  </div>
+  <div class="setting">
+    <div class="settingText"><b>低確率レア演出</b><span>約3%でRARE、約0.5%でULTRA、約0.1%でSECRET。曲の抽選確率は変わりません</span></div>
+    <label class="switch"><input id="rareFx" type="checkbox"><span class="slider"></span></label>
   </div>
   <div class="setting">
     <div class="settingText"><b>効果音</b><span>端末内で短い電子音を生成します</span></div>
@@ -238,15 +338,17 @@ select{min-width:118px;color:#f0fff5;background:#15241d;border:1px solid var(--l
 const SONGS = [{"title":"HeLLo","year":2014,"moods":["明るい・爽やか","やさしい"],"albums":["Introduction","TWELVE"],"status":"released","variant":false,"note":"","id":1},{"title":"藍","year":2014,"moods":["夜・しっとり","エモ・壮大"],"albums":["Introduction","TWELVE"],"status":"released","variant":false,"note":"","id":2},{"title":"スターダム","year":2014,"moods":["爆上がり","エモ・壮大"],"albums":["Introduction","5"],"status":"released","variant":false,"note":"","id":3},{"title":"FACTORY","year":2014,"moods":["ダーク・尖り","グルーヴ"],"albums":["Introduction","Mrs. GREEN APPLE"],"status":"released","variant":false,"note":"","id":4},{"title":"リスキーゲーム","year":2014,"moods":["爆上がり","グルーヴ"],"albums":["Introduction","Variety"],"status":"released","variant":false,"note":"","id":5},{"title":"慶びの種","year":2014,"moods":["やさしい","エモ・壮大"],"albums":["Introduction","10"],"status":"released","variant":false,"note":"","id":6},{"title":"我逢人","year":2015,"moods":["エモ・壮大","やさしい"],"albums":["Progressive","5"],"status":"released","variant":false,"note":"","id":7},{"title":"ナニヲナニヲ","year":2015,"moods":["ダーク・尖り","爆上がり"],"albums":["Progressive"],"status":"released","variant":false,"note":"","id":8},{"title":"CONFLICT","year":2015,"moods":["ダーク・尖り","爆上がり"],"albums":["Progressive"],"status":"released","variant":false,"note":"","id":9},{"title":"アンゼンパイ","year":2015,"moods":["変化球","グルーヴ"],"albums":["Progressive"],"status":"released","variant":false,"note":"","id":10},{"title":"日々と君","year":2015,"moods":["夜・しっとり","やさしい"],"albums":["Progressive"],"status":"released","variant":false,"note":"","id":11},{"title":"WaLL FloWeR","year":2015,"moods":["ダーク・尖り","変化球"],"albums":["Progressive"],"status":"released","variant":false,"note":"","id":12},{"title":"StaRt","year":2015,"moods":["爆上がり","明るい・爽やか"],"albums":["Variety","5"],"status":"released","variant":false,"note":"","id":13},{"title":"L.P","year":2015,"moods":["爆上がり","グルーヴ"],"albums":["Variety"],"status":"released","variant":false,"note":"","id":14},{"title":"VIP","year":2015,"moods":["爆上がり","ダーク・尖り"],"albums":["Variety"],"status":"released","variant":false,"note":"","id":15},{"title":"ゼンマイ","year":2015,"moods":["変化球","グルーヴ"],"albums":["Variety"],"status":"released","variant":false,"note":"","id":16},{"title":"道徳と皿","year":2015,"moods":["ダーク・尖り","エモ・壮大"],"albums":["Variety"],"status":"released","variant":false,"note":"","id":17},{"title":"Speaking","year":2015,"moods":["明るい・爽やか","グルーヴ"],"albums":["Speaking","TWELVE","5"],"status":"released","variant":false,"note":"","id":18},{"title":"恋と吟","year":2015,"moods":["夜・しっとり","やさしい"],"albums":["Speaking"],"status":"released","variant":false,"note":"","id":19},{"title":"えほん","year":2015,"moods":["やさしい","夜・しっとり"],"albums":["Speaking"],"status":"released","variant":false,"note":"","id":20},{"title":"愛情と矛先","year":2016,"moods":["爆上がり","エモ・壮大"],"albums":["TWELVE"],"status":"released","variant":false,"note":"","id":21},{"title":"パブリック","year":2016,"moods":["ダーク・尖り","グルーヴ"],"albums":["TWELVE","5"],"status":"released","variant":false,"note":"","id":22},{"title":"キコリ時計","year":2016,"moods":["変化球","グルーヴ"],"albums":["TWELVE"],"status":"released","variant":false,"note":"","id":23},{"title":"私","year":2016,"moods":["夜・しっとり","やさしい"],"albums":["TWELVE"],"status":"released","variant":false,"note":"","id":24},{"title":"No.7","year":2016,"moods":["爆上がり","グルーヴ"],"albums":["TWELVE"],"status":"released","variant":false,"note":"","id":25},{"title":"ミスカサズ","year":2016,"moods":["ダーク・尖り","爆上がり"],"albums":["TWELVE"],"status":"released","variant":false,"note":"","id":26},{"title":"SimPle","year":2016,"moods":["明るい・爽やか","グルーヴ"],"albums":["TWELVE"],"status":"released","variant":false,"note":"","id":27},{"title":"InTerLuDe 〜白い朝〜","year":2016,"moods":["夜・しっとり","変化球"],"albums":["TWELVE"],"status":"released","variant":false,"note":"","id":28},{"title":"Hug","year":2016,"moods":["やさしい","夜・しっとり"],"albums":["TWELVE"],"status":"released","variant":false,"note":"","id":29},{"title":"庶幾の唄","year":2016,"moods":["エモ・壮大","明るい・爽やか"],"albums":["TWELVE"],"status":"released","variant":false,"note":"","id":30},{"title":"サママ・フェスティバル！","year":2016,"moods":["爆上がり","明るい・爽やか"],"albums":["サママ・フェスティバル！","Mrs. GREEN APPLE","5"],"status":"released","variant":false,"note":"","id":31},{"title":"umbrella","year":2016,"moods":["夜・しっとり","エモ・壮大"],"albums":["サママ・フェスティバル！"],"status":"released","variant":false,"note":"","id":32},{"title":"ノニサクウタ","year":2016,"moods":["夜・しっとり","やさしい"],"albums":["サママ・フェスティバル！"],"status":"released","variant":false,"note":"","id":33},{"title":"In the Morning","year":2016,"moods":["明るい・爽やか","爆上がり"],"albums":["In the Morning","Mrs. GREEN APPLE","5"],"status":"released","variant":false,"note":"","id":34},{"title":"ツキマシテハ","year":2016,"moods":["ダーク・尖り","エモ・壮大"],"albums":["In the Morning"],"status":"released","variant":false,"note":"","id":35},{"title":"Oz","year":2016,"moods":["夜・しっとり","変化球"],"albums":["In the Morning"],"status":"released","variant":false,"note":"","id":36},{"title":"Lion","year":2017,"moods":["爆上がり","エモ・壮大"],"albums":["Mrs. GREEN APPLE"],"status":"released","variant":false,"note":"","id":37},{"title":"おもちゃの兵隊","year":2017,"moods":["変化球","ダーク・尖り"],"albums":["Mrs. GREEN APPLE"],"status":"released","variant":false,"note":"","id":38},{"title":"絶世生物","year":2017,"moods":["ダーク・尖り","爆上がり"],"albums":["Mrs. GREEN APPLE"],"status":"released","variant":false,"note":"","id":39},{"title":"soFt-dRink","year":2017,"moods":["グルーヴ","変化球"],"albums":["Mrs. GREEN APPLE"],"status":"released","variant":false,"note":"","id":40},{"title":"鯨の唄","year":2017,"moods":["エモ・壮大","夜・しっとり"],"albums":["Mrs. GREEN APPLE","5"],"status":"released","variant":false,"note":"","id":41},{"title":"うブ","year":2017,"moods":["爆上がり","グルーヴ"],"albums":["Mrs. GREEN APPLE"],"status":"released","variant":false,"note":"","id":42},{"title":"Just a Friend","year":2017,"moods":["夜・しっとり","やさしい"],"albums":["Mrs. GREEN APPLE"],"status":"released","variant":false,"note":"","id":43},{"title":"JOURNEY","year":2017,"moods":["エモ・壮大","明るい・爽やか"],"albums":["Mrs. GREEN APPLE"],"status":"released","variant":false,"note":"","id":44},{"title":"Oz (Album Version)","year":2017,"moods":["夜・しっとり","変化球"],"albums":["Mrs. GREEN APPLE"],"status":"released","variant":true,"note":"","id":45},{"title":"umbrella (Album Version)","year":2017,"moods":["夜・しっとり","エモ・壮大"],"albums":["Mrs. GREEN APPLE"],"status":"released","variant":true,"note":"","id":46},{"title":"どこかで日は昇る","year":2017,"moods":["エモ・壮大","やさしい"],"albums":["どこかで日は昇る","5"],"status":"released","variant":false,"note":"","id":47},{"title":"スマイロブドリーマ","year":2017,"moods":["明るい・爽やか","爆上がり"],"albums":["どこかで日は昇る","ENSEMBLE"],"status":"released","variant":false,"note":"","id":48},{"title":"SwitCh","year":2017,"moods":["爆上がり","グルーヴ"],"albums":["どこかで日は昇る"],"status":"released","variant":false,"note":"","id":49},{"title":"WanteD! WanteD!","year":2017,"moods":["爆上がり","グルーヴ"],"albums":["WanteD! WanteD!","ENSEMBLE","5"],"status":"released","variant":false,"note":"","id":50},{"title":"On My MiND","year":2017,"moods":["グルーヴ","明るい・爽やか"],"albums":["WanteD! WanteD!"],"status":"released","variant":false,"note":"","id":51},{"title":"光のうた","year":2017,"moods":["やさしい","エモ・壮大"],"albums":["WanteD! WanteD!"],"status":"released","variant":false,"note":"","id":52},{"title":"WHOO WHOO WHOO","year":2017,"moods":["爆上がり","グルーヴ"],"albums":["Digital","ENSEMBLE"],"status":"released","variant":false,"note":"","id":53},{"title":"WanteD! WanteD! (KERENMI Remix)","year":2017,"moods":["グルーヴ","変化球"],"albums":["Digital"],"status":"released","variant":true,"note":"","id":54},{"title":"Love me, Love you","year":2018,"moods":["明るい・爽やか","グルーヴ"],"albums":["Love me, Love you","5"],"status":"released","variant":false,"note":"","id":55},{"title":"Log (feat.坂口有望)","year":2018,"moods":["夜・しっとり","やさしい"],"albums":["Love me, Love you"],"status":"released","variant":false,"note":"","id":56},{"title":"春愁","year":2018,"moods":["夜・しっとり","やさしい"],"albums":["Love me, Love you"],"status":"released","variant":false,"note":"","id":57},{"title":"Love me, Love you (ENSEMBLE Version)","year":2018,"moods":["明るい・爽やか","グルーヴ"],"albums":["ENSEMBLE"],"status":"released","variant":true,"note":"","id":58},{"title":"PARTY","year":2018,"moods":["爆上がり","グルーヴ"],"albums":["ENSEMBLE"],"status":"released","variant":false,"note":"","id":59},{"title":"アウフヘーベン","year":2018,"moods":["ダーク・尖り","爆上がり"],"albums":["ENSEMBLE","5"],"status":"released","variant":false,"note":"","id":60},{"title":"はじまり feat. キヨサク from MONGOL800","year":2018,"moods":["やさしい","エモ・壮大"],"albums":["ENSEMBLE"],"status":"released","variant":false,"note":"","id":61},{"title":"They are","year":2018,"moods":["夜・しっとり","やさしい"],"albums":["ENSEMBLE"],"status":"released","variant":false,"note":"","id":62},{"title":"SPLASH!!!","year":2018,"moods":["爆上がり","明るい・爽やか"],"albums":["ENSEMBLE"],"status":"released","variant":false,"note":"","id":63},{"title":"REVERSE","year":2018,"moods":["夜・しっとり","ダーク・尖り"],"albums":["ENSEMBLE"],"status":"released","variant":false,"note":"","id":64},{"title":"Coffee","year":2018,"moods":["夜・しっとり","やさしい"],"albums":["ENSEMBLE"],"status":"released","variant":false,"note":"","id":65},{"title":"On My MiND (Album Version)","year":2018,"moods":["グルーヴ","明るい・爽やか"],"albums":["ENSEMBLE"],"status":"released","variant":true,"note":"","id":66},{"title":"どこかで日は昇る (Album Mix)","year":2018,"moods":["エモ・壮大","やさしい"],"albums":["ENSEMBLE"],"status":"released","variant":true,"note":"","id":67},{"title":"青と夏","year":2018,"moods":["爆上がり","明るい・爽やか"],"albums":["青と夏","5"],"status":"released","variant":false,"note":"","id":68},{"title":"点描の唄 (feat.井上苑子)","year":2018,"moods":["夜・しっとり","エモ・壮大"],"albums":["青と夏"],"status":"released","variant":false,"note":"","id":69},{"title":"ア・プリオリ","year":2018,"moods":["ダーク・尖り","夜・しっとり"],"albums":["青と夏"],"status":"released","variant":false,"note":"","id":70},{"title":"僕のこと","year":2019,"moods":["エモ・壮大","やさしい"],"albums":["僕のこと","Attitude","5"],"status":"released","variant":false,"note":"","id":71},{"title":"灯火","year":2019,"moods":["夜・しっとり","やさしい"],"albums":["僕のこと"],"status":"released","variant":false,"note":"","id":72},{"title":"Folktale","year":2019,"moods":["エモ・壮大","やさしい"],"albums":["僕のこと","Attitude"],"status":"released","variant":false,"note":"","id":73},{"title":"ロマンチシズム","year":2019,"moods":["明るい・爽やか","グルーヴ"],"albums":["ロマンチシズム","Attitude","5"],"status":"released","variant":false,"note":"","id":74},{"title":"How-to","year":2019,"moods":["爆上がり","グルーヴ"],"albums":["ロマンチシズム","Attitude"],"status":"released","variant":false,"note":"","id":75},{"title":"月とアネモネ","year":2019,"moods":["夜・しっとり","やさしい"],"albums":["ロマンチシズム"],"status":"released","variant":false,"note":"","id":76},{"title":"InsPirATioN","year":2019,"moods":["変化球","グルーヴ"],"albums":["Attitude"],"status":"released","variant":false,"note":"","id":77},{"title":"Attitude","year":2019,"moods":["エモ・壮大","グルーヴ"],"albums":["Attitude"],"status":"released","variant":false,"note":"","id":78},{"title":"インフェルノ","year":2019,"moods":["爆上がり","ダーク・尖り"],"albums":["Attitude","5"],"status":"released","variant":false,"note":"","id":79},{"title":"CHEERS","year":2019,"moods":["爆上がり","明るい・爽やか"],"albums":["Attitude"],"status":"released","variant":false,"note":"","id":80},{"title":"Viking","year":2019,"moods":["ダーク・尖り","グルーヴ"],"albums":["Attitude"],"status":"released","variant":false,"note":"","id":81},{"title":"ProPose","year":2019,"moods":["夜・しっとり","グルーヴ"],"albums":["Attitude"],"status":"released","variant":false,"note":"","id":82},{"title":"クダリ","year":2019,"moods":["夜・しっとり","ダーク・尖り"],"albums":["Attitude"],"status":"released","variant":false,"note":"","id":83},{"title":"lovin’","year":2019,"moods":["明るい・爽やか","やさしい"],"albums":["Attitude"],"status":"released","variant":false,"note":"","id":84},{"title":"Ke-Mo Sah-Bee","year":2019,"moods":["爆上がり","変化球"],"albums":["Attitude"],"status":"released","variant":false,"note":"","id":85},{"title":"嘘じゃないよ","year":2019,"moods":["夜・しっとり","やさしい"],"albums":["Attitude"],"status":"released","variant":false,"note":"","id":86},{"title":"Soup","year":2019,"moods":["夜・しっとり","グルーヴ"],"albums":["Attitude"],"status":"released","variant":false,"note":"","id":87},{"title":"Circle","year":2019,"moods":["エモ・壮大","変化球"],"albums":["Attitude"],"status":"released","variant":false,"note":"","id":88},{"title":"PRESENT (English ver.)","year":2020,"moods":["明るい・爽やか","やさしい"],"albums":["Digital"],"status":"released","variant":true,"note":"","id":89},{"title":"PRESENT (Japanese ver.)","year":2020,"moods":["明るい・爽やか","やさしい"],"albums":["5"],"status":"released","variant":false,"note":"","id":90},{"title":"アボイドノート","year":2020,"moods":["爆上がり","グルーヴ"],"albums":["5"],"status":"released","variant":false,"note":"","id":91},{"title":"Theater","year":2020,"moods":["エモ・壮大","夜・しっとり"],"albums":["5"],"status":"released","variant":false,"note":"","id":92},{"title":"ニュー・マイ・ノーマル","year":2022,"moods":["明るい・爽やか","エモ・壮大"],"albums":["Unity","10"],"status":"released","variant":false,"note":"","id":93},{"title":"ダンスホール","year":2022,"moods":["爆上がり","グルーヴ"],"albums":["Unity","10"],"status":"released","variant":false,"note":"","id":94},{"title":"ブルーアンビエンス (feat. asmi)","year":2022,"moods":["明るい・爽やか","グルーヴ"],"albums":["Unity"],"status":"released","variant":false,"note":"","id":95},{"title":"君を知らない","year":2022,"moods":["夜・しっとり","やさしい"],"albums":["Unity"],"status":"released","variant":false,"note":"","id":96},{"title":"延々","year":2022,"moods":["ダーク・尖り","爆上がり"],"albums":["Unity"],"status":"released","variant":false,"note":"","id":97},{"title":"Part of me","year":2022,"moods":["夜・しっとり","エモ・壮大"],"albums":["Unity"],"status":"released","variant":false,"note":"","id":98},{"title":"Soranji","year":2022,"moods":["エモ・壮大","夜・しっとり"],"albums":["Soranji","ANTENNA","10"],"status":"released","variant":false,"note":"","id":99},{"title":"私は最強","year":2022,"moods":["爆上がり","エモ・壮大"],"albums":["Soranji","ANTENNA","10"],"status":"released","variant":false,"note":"","id":100},{"title":"フロリジナル","year":2022,"moods":["明るい・爽やか","グルーヴ"],"albums":["Soranji"],"status":"released","variant":false,"note":"","id":101},{"title":"ANTENNA","year":2023,"moods":["爆上がり","エモ・壮大"],"albums":["ANTENNA","10"],"status":"released","variant":false,"note":"","id":102},{"title":"Magic","year":2023,"moods":["爆上がり","明るい・爽やか"],"albums":["ANTENNA","10"],"status":"released","variant":false,"note":"","id":103},{"title":"Blizzard","year":2023,"moods":["ダーク・尖り","爆上がり"],"albums":["ANTENNA"],"status":"released","variant":false,"note":"","id":104},{"title":"ケセラセラ","year":2023,"moods":["エモ・壮大","明るい・爽やか"],"albums":["ANTENNA","10"],"status":"released","variant":false,"note":"","id":105},{"title":"アンラブレス","year":2023,"moods":["ダーク・尖り","グルーヴ"],"albums":["ANTENNA"],"status":"released","variant":false,"note":"","id":106},{"title":"Loneliness","year":2023,"moods":["ダーク・尖り","爆上がり"],"albums":["ANTENNA"],"status":"released","variant":false,"note":"","id":107},{"title":"norn","year":2023,"moods":["夜・しっとり","変化球"],"albums":["ANTENNA"],"status":"released","variant":false,"note":"","id":108},{"title":"橙","year":2023,"moods":["やさしい","エモ・壮大"],"albums":["ANTENNA"],"status":"released","variant":false,"note":"","id":109},{"title":"Doodle","year":2023,"moods":["明るい・爽やか","グルーヴ"],"albums":["ANTENNA"],"status":"released","variant":false,"note":"","id":110},{"title":"BFF","year":2023,"moods":["やさしい","明るい・爽やか"],"albums":["ANTENNA"],"status":"released","variant":false,"note":"","id":111},{"title":"Feeling","year":2023,"moods":["グルーヴ","明るい・爽やか"],"albums":["ANTENNA"],"status":"released","variant":false,"note":"","id":112},{"title":"ナハトムジーク","year":2024,"moods":["夜・しっとり","エモ・壮大"],"albums":["Digital","10"],"status":"released","variant":false,"note":"","id":113},{"title":"ライラック","year":2024,"moods":["爆上がり","明るい・爽やか"],"albums":["Digital","10"],"status":"released","variant":false,"note":"","id":114},{"title":"Dear","year":2024,"moods":["エモ・壮大","やさしい"],"albums":["Digital","10"],"status":"released","variant":false,"note":"","id":115},{"title":"コロンブス","year":2024,"moods":["グルーヴ","明るい・爽やか"],"albums":["Digital","10"],"status":"released","variant":false,"note":"","id":116},{"title":"アポロドロス","year":2024,"moods":["爆上がり","エモ・壮大"],"albums":["Digital","10"],"status":"released","variant":false,"note":"","id":117},{"title":"familie","year":2024,"moods":["やさしい","明るい・爽やか"],"albums":["Digital","10"],"status":"released","variant":false,"note":"","id":118},{"title":"The White Lounge","year":2024,"moods":["夜・しっとり","変化球"],"albums":["The White Lounge"],"status":"released","variant":true,"note":"","id":119},{"title":"Folktale (The White Lounge Version)","year":2024,"moods":["夜・しっとり","エモ・壮大"],"albums":["The White Lounge"],"status":"released","variant":true,"note":"","id":120},{"title":"君を知らない (The White Lounge Version)","year":2024,"moods":["夜・しっとり","やさしい"],"albums":["The White Lounge"],"status":"released","variant":true,"note":"","id":121},{"title":"ダンスホール (The White Lounge Version)","year":2024,"moods":["グルーヴ","変化球"],"albums":["The White Lounge"],"status":"released","variant":true,"note":"","id":122},{"title":"ツキマシテハ (The White Lounge Version)","year":2024,"moods":["夜・しっとり","ダーク・尖り"],"albums":["The White Lounge"],"status":"released","variant":true,"note":"","id":123},{"title":"Coffee (The White Lounge Version)","year":2024,"moods":["夜・しっとり","やさしい"],"albums":["The White Lounge"],"status":"released","variant":true,"note":"","id":124},{"title":"ニュー・マイ・ノーマル (The White Lounge Version)","year":2024,"moods":["やさしい","エモ・壮大"],"albums":["The White Lounge"],"status":"released","variant":true,"note":"","id":125},{"title":"PARTY (The White Lounge Version)","year":2024,"moods":["グルーヴ","変化球"],"albums":["The White Lounge"],"status":"released","variant":true,"note":"","id":126},{"title":"春愁 (The White Lounge Version)","year":2024,"moods":["夜・しっとり","やさしい"],"albums":["The White Lounge"],"status":"released","variant":true,"note":"","id":127},{"title":"Just a Friend (The White Lounge Version)","year":2024,"moods":["夜・しっとり","やさしい"],"albums":["The White Lounge"],"status":"released","variant":true,"note":"","id":128},{"title":"Attitude (The White Lounge Version)","year":2024,"moods":["エモ・壮大","変化球"],"albums":["The White Lounge"],"status":"released","variant":true,"note":"","id":129},{"title":"Feeling (The White Lounge Version)","year":2024,"moods":["グルーヴ","変化球"],"albums":["The White Lounge"],"status":"released","variant":true,"note":"","id":130},{"title":"ケセラセラ (The White Lounge Version)","year":2024,"moods":["エモ・壮大","やさしい"],"albums":["The White Lounge"],"status":"released","variant":true,"note":"","id":131},{"title":"Soranji (The White Lounge Version)","year":2024,"moods":["夜・しっとり","エモ・壮大"],"albums":["The White Lounge"],"status":"released","variant":true,"note":"","id":132},{"title":"The White Lounge -reprise-","year":2024,"moods":["夜・しっとり","変化球"],"albums":["The White Lounge"],"status":"released","variant":true,"note":"","id":133},{"title":"フロリジナル (The White Lounge Version)","year":2024,"moods":["グルーヴ","変化球"],"albums":["The White Lounge"],"status":"released","variant":true,"note":"","id":134},{"title":"ビターバカンス","year":2024,"moods":["明るい・爽やか","グルーヴ"],"albums":["Digital","10"],"status":"released","variant":false,"note":"","id":135},{"title":"ダーリン","year":2025,"moods":["エモ・壮大","やさしい"],"albums":["Digital","10"],"status":"released","variant":false,"note":"","id":136},{"title":"クスシキ","year":2025,"moods":["爆上がり","グルーヴ"],"albums":["Digital","10"],"status":"released","variant":false,"note":"","id":137},{"title":"天国","year":2025,"moods":["ダーク・尖り","エモ・壮大"],"albums":["Digital","10"],"status":"released","variant":false,"note":"","id":138},{"title":"breakfast","year":2025,"moods":["明るい・爽やか","グルーヴ"],"albums":["Digital","10"],"status":"released","variant":false,"note":"","id":139},{"title":"道徳と皿 ～2025 ver.～","year":2025,"moods":["ダーク・尖り","エモ・壮大"],"albums":["10"],"status":"released","variant":true,"note":"","id":140},{"title":"Carrying Happiness","year":2025,"moods":["爆上がり","明るい・爽やか"],"albums":["Digital","POPS"],"status":"released","variant":false,"note":"","id":141},{"title":"夏の影","year":2025,"moods":["夜・しっとり","やさしい"],"albums":["Digital","POPS"],"status":"released","variant":false,"note":"","id":142},{"title":"GOOD DAY","year":2025,"moods":["明るい・爽やか","爆上がり"],"albums":["Digital","POPS"],"status":"released","variant":false,"note":"","id":143},{"title":"lulu.","year":2026,"moods":["夜・しっとり","エモ・壮大"],"albums":["Digital","POPS"],"status":"released","variant":false,"note":"","id":144},{"title":"風と町","year":2026,"moods":["やさしい","エモ・壮大"],"albums":["Digital","POPS"],"status":"released","variant":false,"note":"","id":145},{"title":"Brand New","year":2026,"moods":["爆上がり","エモ・壮大"],"albums":["Digital","POPS"],"status":"released","variant":false,"note":"","id":146},{"title":"共犯","year":2026,"moods":["ダーク・尖り","グルーヴ"],"albums":["POPS"],"status":"upcoming","variant":false,"note":"『POPS』収録 / 2026年9月30日 0:00 デジタル配信予定","id":147},{"title":"シンデレラ","year":2026,"moods":["明るい・爽やか","グルーヴ"],"albums":["POPS"],"status":"upcoming","variant":false,"note":"『POPS』収録 / 2026年9月30日 0:00 デジタル配信予定","id":148},{"title":"本と彗星","year":2026,"moods":["夜・しっとり","エモ・壮大"],"albums":["POPS"],"status":"upcoming","variant":false,"note":"『POPS』収録 / 2026年9月30日 0:00 デジタル配信予定","id":149},{"title":"ア・ポステリオリ","year":2026,"moods":["ダーク・尖り","変化球"],"albums":["POPS"],"status":"upcoming","variant":false,"note":"『POPS』収録 / 2026年9月30日 0:00 デジタル配信予定","id":150},{"title":"エピソード","year":2026,"moods":["エモ・壮大","やさしい"],"albums":["POPS"],"status":"upcoming","variant":false,"note":"『POPS』収録 / 2026年9月30日 0:00 デジタル配信予定","id":151},{"title":"Really Really","year":2026,"moods":["明るい・爽やか","グルーヴ"],"albums":["POPS"],"status":"upcoming","variant":false,"note":"『POPS』収録 / 2026年9月30日 0:00 デジタル配信予定","id":152},{"title":"プロジェクト4","year":2026,"moods":["爆上がり","変化球"],"albums":["POPS"],"status":"upcoming","variant":false,"note":"『POPS』収録 / 2026年9月30日 0:00 デジタル配信予定","id":153},{"title":"瞞し","year":2026,"moods":["ダーク・尖り","変化球"],"albums":["POPS"],"status":"upcoming","variant":false,"note":"『POPS』収録 / 2026年9月30日 0:00 デジタル配信予定","id":154},{"title":"禁じた遊び","year":2026,"moods":["ダーク・尖り","グルーヴ"],"albums":["POPS"],"status":"upcoming","variant":false,"note":"『POPS』収録 / 2026年9月30日 0:00 デジタル配信予定","id":155},{"title":"Variety","year":2026,"moods":["エモ・壮大","グルーヴ"],"albums":["POPS"],"status":"upcoming","variant":false,"note":"『POPS』収録 / 2026年9月30日 0:00 デジタル配信予定","id":156}];
 const MOODS=["夜・しっとり","やさしい","エモ・壮大","明るい・爽やか","爆上がり","ダーク・尖り","グルーヴ","変化球"];
 const PERIODS={"2014–2016":[2014,2015,2016],"2017–2019":[2017,2018,2019],"2020–2022":[2020,2021,2022],"2023–2024":[2023,2024],"2025–2026":[2025,2026]};
-const SETTINGS_KEY="mgaGachaSettingsV2",HISTORY_KEY="mgaGachaHistoryV2",APPLE_CACHE_KEY="mgaAppleLinksV2";
-const defaults={animation:"standard",moodFx:true,sound:false,recent:10,variants:false,upcoming:true};
+const SETTINGS_KEY="mgaGachaSettingsV2",HISTORY_KEY="mgaGachaHistoryV2",APPLE_CACHE_KEY="mgaAppleMetaV3";
+const defaults={animation:"standard",moodFx:true,rareFx:true,sound:false,recent:10,variants:false,upcoming:true};
 let settings={...defaults,...safeJSON(localStorage.getItem(SETTINGS_KEY),{})};
 let history=safeJSON(localStorage.getItem(HISTORY_KEY),[]).filter(x=>x&&x.id).slice(0,80);
 let appleCache=safeJSON(localStorage.getItem(APPLE_CACHE_KEY),{});
 let mode="all",selected=null,current=null,drawing=false;
 
 const $=id=>document.getElementById(id);
-const cover=$("cover"),coverTitle=$("coverTitle"),coverAlbum=$("coverAlbum"),coverMood=$("coverMood"),coverYear=$("coverYear");
+const cover=$("cover"),coverArt=$("coverArt"),coverTitle=$("coverTitle"),coverAlbum=$("coverAlbum"),coverMood=$("coverMood"),coverYear=$("coverYear");
+const gachaOverlay=$("gachaOverlay"),gachaRoll=$("gachaRoll"),gachaSub=$("gachaSub"),gachaLabel=$("gachaLabel"),rareMark=$("rareMark");
+let currentAppleMeta=null,artRequestToken=0;
 const meta1=$("meta1"),meta2=$("meta2"),rollName=$("rollName"),drawBtn=$("drawBtn"),musicBtn=$("musicBtn"),chips=$("chips");
 
 function safeJSON(s,fallback){try{return s?JSON.parse(s):fallback}catch{return fallback}}
@@ -290,6 +392,24 @@ function primaryMood(s){return s?.moods?.[0]||"やさしい"}
 function fxClass(m){
   return {"夜・しっとり":"fx-night","やさしい":"fx-gentle","エモ・壮大":"fx-emo","明るい・爽やか":"fx-bright","爆上がり":"fx-hype","ダーク・尖り":"fx-dark","グルーヴ":"fx-groove","変化球":"fx-twist"}[m]||"fx-gentle";
 }
+function clearArtwork(){
+  artRequestToken++;
+  currentAppleMeta=null;
+  cover.classList.remove("has-artwork","art-pop");
+  coverArt.removeAttribute("src");
+  coverArt.alt="";
+}
+function applyArtwork(meta,s){
+  if(!meta?.artwork||!s||current?.id!==s.id)return;
+  coverArt.onload=()=>{
+    if(current?.id!==s.id)return;
+    cover.classList.add("has-artwork");
+    cover.classList.remove("art-pop");void cover.offsetWidth;cover.classList.add("art-pop");
+    setTimeout(()=>cover.classList.remove("art-pop"),700);
+  };
+  coverArt.alt=`${s.title} のジャケット`;
+  coverArt.src=meta.artwork;
+}
 function renderSong(s,preview=false){
   if(!s)return;
   cover.style.setProperty("--hue",hueFor(s));
@@ -299,16 +419,19 @@ function renderSong(s,preview=false){
   coverMood.textContent=primaryMood(s);
   coverYear.textContent=s.year;
   if(preview){
+    cover.classList.remove("has-artwork");
     meta1.textContent="抽選中…";meta2.textContent=s.moods.join(" / ");return;
   }
+  clearArtwork();
   meta1.textContent=`${s.year} · ${albumName(s)}`;
   meta2.textContent=s.status==="upcoming"?(s.note||"配信予定"):s.moods.join(" / ");
   musicBtn.classList.toggle("show",s.status!=="upcoming");
   musicBtn.disabled=false;
   musicBtn.textContent=" Musicで聴く";
+  if(s.status!=="upcoming")hydrateAppleMeta(s);
 }
-function addHistory(s){
-  const item={id:s.id,title:s.title,year:s.year,moods:s.moods,albums:s.albums,status:s.status,variant:s.variant,at:Date.now()};
+function addHistory(s,rareTier="normal"){
+  const item={id:s.id,title:s.title,year:s.year,moods:s.moods,albums:s.albums,status:s.status,variant:s.variant,rareTier,at:Date.now()};
   history=history.filter(h=>!(h.id===s.id && Date.now()-h.at<2000));
   history.unshift(item);history=history.slice(0,80);saveHistory();
 }
@@ -344,29 +467,92 @@ function sound(kind="tick"){
   }catch{}
 }
 function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
+function moodHue(m){
+  return {"夜・しっとり":196,"やさしい":145,"エモ・壮大":171,"明るい・爽やか":92,"爆上がり":72,"ダーク・尖り":154,"グルーヴ":292,"変化球":332}[m]||145;
+}
+function animateRollText(text,sub=""){
+  gachaRoll.classList.remove("swap");void gachaRoll.offsetWidth;
+  gachaRoll.textContent=text;gachaSub.textContent=sub;gachaRoll.classList.add("swap");
+}
+function randomUnit(){
+  if(window.crypto?.getRandomValues){const a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]/4294967296}
+  return Math.random();
+}
+function rollRareTier(anim){
+  if(!settings.rareFx||anim==="off")return "normal";
+  const x=randomUnit();
+  if(x<.001)return "secret";
+  if(x<.006)return "ultra";
+  if(x<.036)return "rare";
+  return "normal";
+}
+function rarityLabel(tier){return tier==="secret"?"SECRET":tier==="ultra"?"ULTRA":tier==="rare"?"RARE":""}
+function applyRareCover(tier){
+  cover.classList.remove("rare-rare","rare-ultra","rare-secret");
+  if(tier!=="normal"){cover.classList.add(`rare-${tier}`);setTimeout(()=>cover.classList.remove(`rare-${tier}`),tier==="secret"?4200:3000)}
+}
+async function runGachaOverlay(p,pick,anim,tier="normal"){
+  if(anim==="off")return;
+  const cfg={
+    short:{count:5,base:48,grow:3,lock:120},
+    standard:{count:11,base:56,grow:8,lock:235},
+    rich:{count:17,base:55,grow:12,lock:360}
+  }[anim]||{count:11,base:56,grow:8,lock:235};
+  gachaOverlay.className=`gachaOverlay active ${anim}${tier!=="normal"?` rare-${tier}`:""}`;
+  gachaOverlay.style.setProperty("--fxHue",145);
+  rareMark.textContent=rarityLabel(tier);
+  gachaOverlay.setAttribute("aria-hidden","false");
+  gachaLabel.textContent=tier!=="normal"?"SPECIAL DRAW":(anim==="rich"?"MGA SONG GACHA · RICH":"MGA SONG GACHA");
+  for(let i=0;i<cfg.count;i++){
+    let temp=randomItem(p);
+    if(temp?.id===pick.id&&p.length>1)temp=randomItem(p.filter(x=>x.id!==pick.id));
+    animateRollText(temp.title,`${temp.year} · ${primaryMood(temp)}`);
+    if(i%2===0)sound("tick");
+    await sleep(cfg.base + Math.round(i*cfg.grow));
+  }
+  const mood=primaryMood(pick);
+  gachaOverlay.style.setProperty("--fxHue",moodHue(mood));
+  gachaOverlay.classList.add("lock");
+  gachaLabel.textContent=tier==="secret"?"SECRET SELECTED":tier==="ultra"?"ULTRA SELECTED":tier==="rare"?"RARE SELECTED":"SELECTED";
+  animateRollText(pick.title,`${pick.year} · ${mood}`);
+  sound("final");
+  await sleep(cfg.lock+(tier==="secret"?850:tier==="ultra"?440:tier==="rare"?220:0));
+}
+function hideGachaOverlay(){
+  gachaOverlay.classList.add("finish");
+  setTimeout(()=>{
+    gachaOverlay.className="gachaOverlay";
+    gachaOverlay.setAttribute("aria-hidden","true");
+  },280);
+}
 async function drawSong(){
   if(drawing)return;
   let p=filteredPool(false);if(!p.length)p=filteredPool(true);
   if(!p.length){meta1.textContent="該当する曲がありません";return}
   drawing=true;drawBtn.disabled=true;musicBtn.classList.remove("show");rollName.classList.add("on");
   const anim=settings.animation;
-  const config={off:[0,0],short:[4,55],standard:[10,68],rich:[17,72]}[anim]||[10,68];
+  const pick=randomItem(p);
+  const rareTier=rollRareTier(anim);
   cover.classList.add("rolling");
-  for(let i=0;i<config[0];i++){
-    const temp=randomItem(p);renderSong(temp,true);rollName.textContent=temp.title;sound("tick");
-    await sleep(config[1]+Math.round(i*4.5));
+  try{
+    await runGachaOverlay(p,pick,anim,rareTier);
+    current=pick;renderSong(pick,false);
+    rollName.textContent=pick.title;rollName.classList.remove("on");cover.classList.remove("rolling");
+    addHistory(pick,rareTier);updateCount();
+    cover.classList.remove("fx-night","fx-gentle","fx-emo","fx-bright","fx-hype","fx-dark","fx-groove","fx-twist","rare-rare","rare-ultra","rare-secret");
+    if(settings.moodFx&&anim!=="off"){
+      const mood=primaryMood(pick);
+      if(mood==="ダーク・尖り"){$("screenFlash").classList.remove("go");void $("screenFlash").offsetWidth;$("screenFlash").classList.add("go")}
+      cover.classList.add(fxClass(mood));showParticles(mood,anim==="rich"?28:18);
+      setTimeout(()=>cover.classList.remove(fxClass(mood)),1200);
+    }
+    if(rareTier!=="normal")applyRareCover(rareTier);
+    if(anim!=="off")hideGachaOverlay();
+    else sound("final");
+    if(navigator.vibrate&&anim!=="off")navigator.vibrate(rareTier==="secret"?[35,40,35,40,70]:rareTier==="ultra"?[28,32,28,32,48]:rareTier==="rare"?[24,24,38]:(anim==="rich"?[22,34,42]:[18,18,24]));
+  }finally{
+    setTimeout(()=>{drawBtn.disabled=false;drawing=false},anim==="off"?0:230);
   }
-  const pick=randomItem(p);current=pick;renderSong(pick,false);rollName.classList.remove("on");cover.classList.remove("rolling");
-  addHistory(pick);updateCount();
-  cover.className="cover";
-  if(settings.moodFx&&anim!=="off"){
-    const mood=primaryMood(pick);
-    if(mood==="ダーク・尖り"){$("screenFlash").classList.remove("go");void $("screenFlash").offsetWidth;$("screenFlash").classList.add("go")}
-    cover.classList.add(fxClass(mood));showParticles(mood);
-    setTimeout(()=>cover.classList.remove(fxClass(mood)),1100);
-  }
-  sound("final");if(navigator.vibrate&&anim!=="off")navigator.vibrate(anim==="rich"?[18,28,32]:18);
-  drawBtn.disabled=false;drawing=false;
 }
 function updateCount(){
   const p=filteredPool(false),raw=filteredPool(true);
@@ -413,59 +599,115 @@ function renderHistory(){
   if(!history.length){box.innerHTML='<div class="empty">まだ履歴がありません。<br>ガチャを回すとここに残ります。</div>';return}
   history.slice(0,30).forEach(h=>{
     const b=document.createElement("button");b.type="button";b.className="histItem";
-    const hue=hueFor(h);b.innerHTML=`<span class="histMini" style="--hue:${hue}">🍏</span><span><span class="histTitle"></span><span class="histMeta"></span></span><span class="histTime">${relTime(h.at)}</span>`;
-    b.querySelector(".histTitle").textContent=h.title;b.querySelector(".histMeta").textContent=`${h.year} · ${albumName(h)}`;
+    const hue=hueFor(h),cached=appleCache[String(h.id)];
+    const art=cached?.artwork?`<img src="${cached.artwork}" alt="">`:"🍏";
+    b.innerHTML=`<span class="histMini" style="--hue:${hue}">${art}</span><span><span class="histTitle"></span><span class="histMeta"></span></span><span class="histTime">${relTime(h.at)}</span>`;
+    b.querySelector(".histTitle").textContent=(h.rareTier&&h.rareTier!=="normal"?`${rarityLabel(h.rareTier)} · `:"")+h.title;b.querySelector(".histMeta").textContent=`${h.year} · ${albumName(h)}`;
     b.onclick=()=>{const s=SONGS.find(x=>x.id===h.id)||h;current=s;renderSong(s,false);closeSheet("history")};box.appendChild(b);
   });
 }
 function normalizeForMatch(s){
   return s.normalize("NFKC").toLowerCase().replace(/[’'・･:：!！?？.,。()\[\]〜～\-–—_\s]/g,"");
 }
-async function findAppleMusic(s){
+function artworkLarge(url){
+  if(!url)return null;
+  return url.replace(/\/\d+x\d+bb\./, "/700x700bb.").replace(/\/\d+x\d+bb-/, "/700x700bb-");
+}
+function jsonpAppleSearch(term){
+  return new Promise((resolve,reject)=>{
+    const cb="__mgaApple_"+Date.now()+"_"+Math.random().toString(36).slice(2);
+    const script=document.createElement("script");
+    let done=false;
+    const clean=()=>{if(done)return;done=true;clearTimeout(timer);try{delete window[cb]}catch{};script.remove()};
+    window[cb]=data=>{clean();resolve(data)};
+    script.onerror=()=>{clean();reject(new Error("Apple catalog request failed"))};
+    script.src=`https://itunes.apple.com/search?term=${encodeURIComponent(term)}&country=JP&media=music&entity=song&limit=50&callback=${encodeURIComponent(cb)}`;
+    document.head.appendChild(script);
+    const timer=setTimeout(()=>{clean();reject(new Error("Apple catalog timeout"))},6500);
+  });
+}
+function scoreAppleResult(s,r){
+  const artist=(r.artistName||"").toLowerCase();
+  if(!artist.includes("mrs. green apple"))return -999;
+  const target=baseSearchTitle(s.title),tNorm=normalizeForMatch(target);
+  const name=r.trackName||"",n=normalizeForMatch(name);
+  let score=0;
+  if(n===tNorm)score+=120;
+  else if(n.startsWith(tNorm)||tNorm.startsWith(n))score+=70;
+  else if(n.includes(tNorm)||tNorm.includes(n))score+=48;
+  const a=normalizeForMatch(albumName(s)),ca=normalizeForMatch(r.collectionName||"");
+  if(a&&ca&&(ca===a||ca.includes(a)||a.includes(ca)))score+=18;
+  const low=s.title.toLowerCase(),rn=name.toLowerCase();
+  if(s.variant){
+    for(const token of ["white lounge","album","remix","2025"]){
+      if(low.includes(token)===rn.includes(token))score+=7;
+      if(low.includes(token)&&rn.includes(token))score+=18;
+    }
+  }
+  return score;
+}
+async function getAppleMeta(s){
   if(!s||s.status==="upcoming")return null;
   const key=String(s.id);
-  if(appleCache[key]?.url)return appleCache[key].url;
+  if(appleCache[key]?.url&&appleCache[key]?.artwork)return appleCache[key];
   const target=baseSearchTitle(s.title),term=`Mrs. GREEN APPLE ${target}`;
   try{
-    const url=`https://itunes.apple.com/search?term=${encodeURIComponent(term)}&country=JP&media=music&entity=song&limit=50`;
-    const res=await fetch(url,{cache:"force-cache"});if(!res.ok)throw new Error("search failed");
-    const data=await res.json();const tNorm=normalizeForMatch(target);
+    const data=await jsonpAppleSearch(term);
     let best=null,bestScore=-999;
     for(const r of (data.results||[])){
-      const artist=(r.artistName||"").toLowerCase();
-      if(!artist.includes("mrs. green apple"))continue;
-      const name=r.trackName||"",n=normalizeForMatch(name);
-      let score=0;
-      if(n===tNorm)score+=100;
-      if(n.includes(tNorm)||tNorm.includes(n))score+=45;
-      const a=normalizeForMatch(albumName(s)),ca=normalizeForMatch(r.collectionName||"");
-      if(a&&ca&&(ca.includes(a)||a.includes(ca)))score+=14;
-      if(s.variant){
-        const low=s.title.toLowerCase(),rn=name.toLowerCase();
-        for(const token of ["white lounge","album","remix","2025"]){if(low.includes(token)&&rn.includes(token))score+=18}
-      }
-      if(score>bestScore){bestScore=score;best=r}
+      const sc=scoreAppleResult(s,r);
+      if(sc>bestScore){bestScore=sc;best=r}
     }
-    if(best&&bestScore>=40){
-      const out=best.trackViewUrl||best.collectionViewUrl;
-      if(out){appleCache[key]={url:out,at:Date.now()};localStorage.setItem(APPLE_CACHE_KEY,JSON.stringify(appleCache));return out}
+    if(best&&bestScore>=55){
+      const direct=best.trackViewUrl||null;
+      const meta={
+        url:direct,
+        artwork:artworkLarge(best.artworkUrl100||best.artworkUrl60||null),
+        trackName:best.trackName||s.title,
+        album:best.collectionName||albumName(s),
+        trackId:best.trackId||null,
+        collectionId:best.collectionId||null,
+        at:Date.now()
+      };
+      appleCache[key]=meta;
+      localStorage.setItem(APPLE_CACHE_KEY,JSON.stringify(appleCache));
+      return meta;
     }
   }catch(e){}
-  return `https://music.apple.com/jp/search?term=${encodeURIComponent("Mrs. GREEN APPLE "+target)}`;
+  return null;
+}
+async function hydrateAppleMeta(s){
+  const token=++artRequestToken;
+  musicBtn.disabled=true;musicBtn.textContent=" ジャケット取得中…";
+  const meta=await getAppleMeta(s);
+  if(token!==artRequestToken||current?.id!==s.id)return;
+  currentAppleMeta=meta;
+  if(meta?.artwork)applyArtwork(meta,s);
+  if(meta?.album){coverAlbum.textContent=meta.album;meta1.textContent=`${s.year} · ${meta.album}`}
+  musicBtn.disabled=false;
+  musicBtn.textContent=meta?.url?" Musicでこの曲を開く":" Musicで検索";
 }
 async function openMusic(){
   if(!current||current.status==="upcoming")return;
-  musicBtn.disabled=true;musicBtn.textContent=" 曲を探しています…";
-  const url=await findAppleMusic(current);
-  musicBtn.disabled=false;musicBtn.textContent=" Musicで聴く";
-  if(url)location.href=url;
+  musicBtn.disabled=true;musicBtn.textContent=" 曲を確認しています…";
+  const meta=currentAppleMeta?.url?currentAppleMeta:await getAppleMeta(current);
+  musicBtn.disabled=false;
+  if(meta?.url){
+    currentAppleMeta=meta;
+    musicBtn.textContent=" Musicでこの曲を開く";
+    if(meta.artwork)applyArtwork(meta,current);
+    window.location.assign(meta.url);
+    return;
+  }
+  musicBtn.textContent=" Musicで検索";
+  window.location.assign(`https://music.apple.com/jp/search?term=${encodeURIComponent("Mrs. GREEN APPLE "+baseSearchTitle(current.title))}`);
 }
 function syncSettingsUI(){
-  $("animationMode").value=settings.animation;$("moodFx").checked=settings.moodFx;$("soundFx").checked=settings.sound;
+  $("animationMode").value=settings.animation;$("moodFx").checked=settings.moodFx;$("rareFx").checked=settings.rareFx;$("soundFx").checked=settings.sound;
   $("recentExclude").value=String(settings.recent);$("variants").checked=settings.variants;$("upcoming").checked=settings.upcoming;
 }
 function readSettingsUI(){
-  settings.animation=$("animationMode").value;settings.moodFx=$("moodFx").checked;settings.sound=$("soundFx").checked;
+  settings.animation=$("animationMode").value;settings.moodFx=$("moodFx").checked;settings.rareFx=$("rareFx").checked;settings.sound=$("soundFx").checked;
   settings.recent=Number($("recentExclude").value);settings.variants=$("variants").checked;settings.upcoming=$("upcoming").checked;
   saveSettings();updateCount();
 }
@@ -476,7 +718,7 @@ drawBtn.onclick=drawSong;musicBtn.onclick=openMusic;
 $("settingsBtn").onclick=()=>openSheet("settings");$("historyBtn").onclick=()=>openSheet("history");
 $("settingsBack").onclick=()=>closeSheet("settings");$("historyBack").onclick=()=>closeSheet("history");
 document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>closeSheet(b.dataset.close));
-["animationMode","moodFx","soundFx","recentExclude","variants","upcoming"].forEach(id=>$(id).addEventListener("change",readSettingsUI));
+["animationMode","moodFx","rareFx","soundFx","recentExclude","variants","upcoming"].forEach(id=>$(id).addEventListener("change",readSettingsUI));
 $("clearHistory").onclick=()=>{if(confirm("ガチャ履歴をすべて消しますか？")){history=[];saveHistory();renderHistory();updateCount()}};
 syncSettingsUI();renderChips();updateCount();
 </script>
